@@ -1,14 +1,15 @@
 package com.bjoggis.linode4j.web;
 
 import static org.hamcrest.Matchers.startsWith;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bjoggis.linode4j.TestSetup;
-import com.bjoggis.linode4j.api.LinodeInterface;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,6 @@ class InstanceControllerTest extends TestSetup {
 
   @Autowired
   private ObjectMapper objectMapper;
-  @Autowired
-  LinodeInterface linodeInterface;
 
   @Test
   void instanceCreated() throws Exception {
@@ -32,6 +31,7 @@ class InstanceControllerTest extends TestSetup {
     mvc.perform(post("/instance/create")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
+        .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.createdBy").value("admin"))
@@ -40,11 +40,22 @@ class InstanceControllerTest extends TestSetup {
 
   @Test
   void listInstances() throws Exception {
-    mvc.perform(get("/instance/list")
-            .contentType(MediaType.APPLICATION_JSON))
+    mvc.perform(get("/instance/list"))
+        .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$[0].id").isNumber())
         .andExpect(jsonPath("$[0].label").value(startsWith("minecraft-auto-config-")))
-        .andExpect(jsonPath("$[0].tags[0]").value("auto-created"));
+        .andExpect(jsonPath("$[0].ip").exists())
+        .andExpect(jsonPath("$[0].status").exists())
+        .andExpect(jsonPath("$[0].created").exists());
+  }
+
+  @Test
+  void deleteInstance() throws Exception {
+    mvc.perform(delete("/instance/1")
+            .param("deletedBy", "admin"))
+        .andDo(print())
+        .andExpect(status().isOk());
   }
 }

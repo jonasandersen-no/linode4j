@@ -1,0 +1,3 @@
+DELETE http://localhost:8080/instance/53540738?deletedBy=admin
+
+

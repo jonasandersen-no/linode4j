@@ -14,8 +14,10 @@ public class DummyLinodeInterface implements LinodeInterface {
   @Override
   public Page<LinodeInstance> list(Integer page, Integer pageSize) {
     return new Page<>(List.of(Instancio.of(LinodeInstance.class)
+        .set(Select.field("id"), 1)
         .set(Select.field("tags"), List.of("auto-created"))
-        .set(Select.field("label"), "minecraft-auto-config-%d".formatted(System.currentTimeMillis()))
+        .set(Select.field("label"),
+            "minecraft-auto-config-%d".formatted(System.currentTimeMillis()))
         .set(Select.field("ipv4"), List.of("127.0.0.1")).create()), 1, 1, 1);
   }
 
