@@ -7,9 +7,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.test.context.support.WithMockUser;
 
 @SpringBootTest(classes = {Application.class, TestConfig.class})
 @AutoConfigureMockMvc
+@WithMockUser
 public abstract class TestSetup {
 
   @TestConfiguration

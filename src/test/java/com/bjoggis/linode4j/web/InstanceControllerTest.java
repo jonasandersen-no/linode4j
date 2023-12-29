@@ -1,6 +1,7 @@
 package com.bjoggis.linode4j.web;
 
 import static org.hamcrest.Matchers.startsWith;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,7 +31,8 @@ class InstanceControllerTest extends TestSetup {
 
     mvc.perform(post("/instance/create")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(request)))
+            .content(objectMapper.writeValueAsString(request))
+            .with(csrf()))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -54,7 +56,8 @@ class InstanceControllerTest extends TestSetup {
   @Test
   void deleteInstance() throws Exception {
     mvc.perform(delete("/instance/1")
-            .param("deletedBy", "admin"))
+            .param("deletedBy", "admin")
+            .with(csrf()))
         .andDo(print())
         .andExpect(status().isOk());
   }
