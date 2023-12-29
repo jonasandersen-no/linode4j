@@ -1,5 +1,5 @@
 package com.bjoggis.linode4j.web;
 
-public record CreateInstanceRequest(String name) {
+public record CreateInstanceRequest(String createdBy) {
 
 }

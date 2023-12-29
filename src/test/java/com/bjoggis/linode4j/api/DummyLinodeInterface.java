@@ -5,6 +5,9 @@ import com.bjoggis.linode4j.api.model.InstanceType;
 import com.bjoggis.linode4j.api.model.LinodeInstance;
 import com.bjoggis.linode4j.api.model.Page;
 import com.bjoggis.linode4j.api.model.Region;
+import java.util.List;
+import org.instancio.Instancio;
+import org.instancio.Select;
 
 public class DummyLinodeInterface implements LinodeInterface {
 
@@ -25,7 +28,10 @@ public class DummyLinodeInterface implements LinodeInterface {
 
   @Override
   public LinodeInstance create(CreateInstanceRequestBody instance) {
-    return null;
+    return Instancio.of(LinodeInstance.class)
+        .set(Select.field("label"), instance.getLabel())
+        .set(Select.field("ipv4"), List.of("127.0.0.1"))
+        .create();
   }
 
   @Override

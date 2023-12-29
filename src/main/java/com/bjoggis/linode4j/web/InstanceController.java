@@ -1,5 +1,10 @@
 package com.bjoggis.linode4j.web;
 
+import com.bjoggis.linode4j.LinodeProperties;
+import com.bjoggis.linode4j.api.CreateInstanceRequestBody;
+import com.bjoggis.linode4j.api.LinodeInterface;
+import com.bjoggis.linode4j.api.model.LinodeInstance;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,12 +17,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class InstanceController {
 
   private final Logger logger = LoggerFactory.getLogger(InstanceController.class);
+  private final LinodeInterface api;
+
+  private final LinodeProperties properties;
+
+  public InstanceController(LinodeInterface api, LinodeProperties properties) {
+    this.api = api;
+    this.properties = properties;
+  }
 
   @PostMapping("/create")
   public CreateInstanceResponse createInstance(@RequestBody CreateInstanceRequest request) {
-    logger.info("Creating instance with name: {}", request.name());
+    logger.info("{} is creating a new instance", request.createdBy());
 
-    return new CreateInstanceResponse(request.name(), "127.0.0.1");
+    final CreateInstanceRequestBody body = new CreateInstanceRequestBody();
+    body.setRegion("se-sto");
+    body.setImage("linode/ubuntu22.04");
+    body.setLabel("minecraft-auto-config-%d".formatted(System.currentTimeMillis()));
+    body.setType("g6-standard-2");
+    body.setTags(List.of("minecraft", "auto-created"));
+    body.setRootPassword((properties.rootPassword()));
+
+    LinodeInstance created = api.create(body);
+    logger.info("Created linode instance: {}", created);
+
+    return new CreateInstanceResponse(request.createdBy(), created.label(), created.ipv4().get(0));
   }
 
 }
