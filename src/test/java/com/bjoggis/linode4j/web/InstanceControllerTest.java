@@ -5,8 +5,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bjoggis.linode4j.TestSetup;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 class InstanceControllerTest extends TestSetup {
@@ -14,10 +16,21 @@ class InstanceControllerTest extends TestSetup {
   @Autowired
   private MockMvc mvc;
 
+  @Autowired
+  private ObjectMapper objectMapper;
+
   @Test
   void testInstanceCreated() throws Exception {
-    mvc.perform(post("/instance/create"))
+    var request = new CreateInstanceRequest("testname");
+
+    var expectedResponse = new CreateInstanceResponse("testname", "127.0.0.1");
+
+    mvc.perform(post("/instance/create")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
-        .andExpect(content().string("Instance created!"));
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(content().json(
+            objectMapper.writeValueAsString(expectedResponse)));
   }
 }
