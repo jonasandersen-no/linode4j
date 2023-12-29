@@ -41,7 +41,8 @@ public class InstanceController {
     LinodeInstance created = api.create(body);
     logger.info("Created linode instance: {}", created);
 
-    return new CreateInstanceResponse(request.createdBy(), created.label(), created.ipv4().get(0));
+    return new CreateInstanceResponse(request.createdBy(), created.label(),
+        created.ipv4().getFirst());
   }
 
 }
