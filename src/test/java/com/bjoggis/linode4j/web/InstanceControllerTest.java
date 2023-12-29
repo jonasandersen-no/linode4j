@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bjoggis.linode4j.TestSetup;
+import com.bjoggis.linode4j.api.LinodeInterface;
+import com.bjoggis.linode4j.api.model.LinodeInstance;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ class InstanceControllerTest extends TestSetup {
 
   @Autowired
   private ObjectMapper objectMapper;
+  @Autowired
+  LinodeInterface linodeInterface;
 
   @Test
   void testInstanceCreated() throws Exception {
