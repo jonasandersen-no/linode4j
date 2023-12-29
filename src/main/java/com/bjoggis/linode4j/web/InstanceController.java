@@ -1,4 +1,4 @@
-package com.bjoggis.linode4j;
+package com.bjoggis.linode4j.web;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
