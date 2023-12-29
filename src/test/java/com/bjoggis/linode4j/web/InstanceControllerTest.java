@@ -24,7 +24,7 @@ class InstanceControllerTest extends TestSetup {
   LinodeInterface linodeInterface;
 
   @Test
-  void testInstanceCreated() throws Exception {
+  void instanceCreated() throws Exception {
     var request = new CreateInstanceRequest("testname");
 
     var expectedResponse = new CreateInstanceResponse("testname", "127.0.0.1");
