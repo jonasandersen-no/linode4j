@@ -2,5 +2,5 @@ POST http://localhost:8080/instance/create
 Content-Type: application/json
 
 {
-  "name": "Test"
+  "createdBy": "Test"
 }
