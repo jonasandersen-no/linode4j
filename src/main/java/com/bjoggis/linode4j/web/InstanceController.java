@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -97,6 +98,7 @@ public class InstanceController {
   }
 
   @DeleteMapping("{id}")
+  @Transactional
   public void deleteInstance(@PathVariable Long id, @RequestParam String deletedBy) {
     logger.info("{} is requesting to delete instance {}", deletedBy, id);
 
@@ -107,7 +109,6 @@ public class InstanceController {
           if (instance.tags().contains("auto-created")) {
             logger.info("Instance {} is auto-created, deleting", id);
             api.delete(id);
-            linodeInstanceRepository.deleteByLinodeId(id);
             logger.info("Deleted instance {}", id);
           } else {
             logger.info("Instance {} is not auto-created, not deleting", id);
@@ -124,5 +125,6 @@ public class InstanceController {
           pd.setTitle("Instance not found");
           throw new ErrorResponseException(HttpStatus.BAD_REQUEST, pd, null);
         });
+    linodeInstanceRepository.deleteByLinodeId(id);
   }
 }
