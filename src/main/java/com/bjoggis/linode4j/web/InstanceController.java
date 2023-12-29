@@ -7,6 +7,7 @@ import com.bjoggis.linode4j.api.model.LinodeInstance;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,15 @@ public class InstanceController {
 
     return new CreateInstanceResponse(request.createdBy(), created.label(),
         created.ipv4().getFirst());
+  }
+
+  @GetMapping("/list")
+  public List<LinodeInstance> listInstances() {
+    List<LinodeInstance> instances = api.list(1, 100).data();
+
+    return instances.stream()
+        .filter(instance -> instance.tags().contains("auto-created"))
+        .toList();
   }
 
 }

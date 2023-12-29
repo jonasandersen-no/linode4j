@@ -1,6 +1,7 @@
 package com.bjoggis.linode4j.web;
 
 import static org.hamcrest.Matchers.startsWith;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -35,5 +36,15 @@ class InstanceControllerTest extends TestSetup {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.createdBy").value("admin"))
         .andExpect(jsonPath("$.label").value(startsWith("minecraft-auto-config-")));
+  }
+
+  @Test
+  void listInstances() throws Exception {
+    mvc.perform(get("/instance/list")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$[0].label").value(startsWith("minecraft-auto-config-")))
+        .andExpect(jsonPath("$[0].tags[0]").value("auto-created"));
   }
 }
