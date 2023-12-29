@@ -13,9 +13,14 @@ public class Linode4jApplication {
     SpringApplication.run(Linode4jApplication.class, args);
   }
 
-  @GetMapping
+  @GetMapping("/")
   public String hello() {
     return "Hello World!";
+  }
+
+  @GetMapping("/test")
+  public String test() {
+    return "Test!";
   }
 
 }
