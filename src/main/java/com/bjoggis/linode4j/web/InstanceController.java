@@ -4,7 +4,9 @@ import com.bjoggis.linode4j.LinodeProperties;
 import com.bjoggis.linode4j.api.CreateInstanceRequestBody;
 import com.bjoggis.linode4j.api.LinodeInterface;
 import com.bjoggis.linode4j.api.model.LinodeInstance;
+import com.bjoggis.linode4j.entity.LinodeInstanceRepository;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,10 +28,13 @@ public class InstanceController {
   private final Logger logger = LoggerFactory.getLogger(InstanceController.class);
   private final LinodeInterface api;
   private final LinodeProperties properties;
+  private final LinodeInstanceRepository linodeInstanceRepository;
 
-  public InstanceController(LinodeInterface api, LinodeProperties properties) {
+  public InstanceController(LinodeInterface api, LinodeProperties properties,
+      LinodeInstanceRepository linodeInstanceRepository) {
     this.api = api;
     this.properties = properties;
+    this.linodeInstanceRepository = linodeInstanceRepository;
   }
 
   @PostMapping("/create")
@@ -47,6 +52,14 @@ public class InstanceController {
     LinodeInstance created = api.create(body);
     logger.info("Created linode instance: {}", created);
 
+    com.bjoggis.linode4j.entity.LinodeInstance db = new com.bjoggis.linode4j.entity.LinodeInstance();
+    db.setLinodeId(created.id());
+    db.setLabel(created.label());
+    db.setIp(created.ipv4().getFirst());
+    db.setStatus(created.status());
+
+    linodeInstanceRepository.save(db);
+
     return new CreateInstanceResponse(request.createdBy(), created.label(),
         created.ipv4().getFirst());
   }
@@ -55,8 +68,28 @@ public class InstanceController {
   public List<ListInstanceResponse> listInstances() {
     List<LinodeInstance> instances = api.list(1, 100).data();
 
-    return instances.stream()
+    List<LinodeInstance> filteredList = instances.stream()
         .filter(instance -> instance.tags().contains("auto-created"))
+        .toList();
+
+    //Update status in db
+    filteredList.forEach(instance -> {
+      Optional<com.bjoggis.linode4j.entity.LinodeInstance> dbInstance = linodeInstanceRepository
+          .findByLinodeId(instance.id());
+      if (dbInstance.isPresent()) {
+        dbInstance.get().setStatus(instance.status());
+        linodeInstanceRepository.save(dbInstance.get());
+      } else {
+        com.bjoggis.linode4j.entity.LinodeInstance linodeInstance = new com.bjoggis.linode4j.entity.LinodeInstance();
+        linodeInstance.setLinodeId(instance.id());
+        linodeInstance.setLabel(instance.label());
+        linodeInstance.setIp(instance.ipv4().getFirst());
+        linodeInstance.setStatus(instance.status());
+        linodeInstanceRepository.save(linodeInstance);
+      }
+    });
+
+    return filteredList.stream()
         .map(instance -> new ListInstanceResponse(instance.id(), instance.label(),
             instance.ipv4().getFirst(),
             instance.status(), instance.created()))
@@ -74,6 +107,7 @@ public class InstanceController {
           if (instance.tags().contains("auto-created")) {
             logger.info("Instance {} is auto-created, deleting", id);
             api.delete(id);
+            linodeInstanceRepository.deleteByLinodeId(id);
             logger.info("Deleted instance {}", id);
           } else {
             logger.info("Instance {} is not auto-created, not deleting", id);
@@ -89,7 +123,6 @@ public class InstanceController {
               .forStatusAndDetail(HttpStatus.BAD_REQUEST, "Instance not found");
           pd.setTitle("Instance not found");
           throw new ErrorResponseException(HttpStatus.BAD_REQUEST, pd, null);
-
         });
   }
 }
