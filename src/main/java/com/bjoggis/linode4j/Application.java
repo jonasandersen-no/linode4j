@@ -2,25 +2,14 @@ package com.bjoggis.linode4j;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
-@RestController
+@ConfigurationPropertiesScan
 public class Application {
 
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
-  }
-
-  @GetMapping("/")
-  public String hello() {
-    return "Hello World!";
-  }
-
-  @GetMapping("/test")
-  public String test() {
-    return "Test!";
   }
 
 }
