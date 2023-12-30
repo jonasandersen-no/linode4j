@@ -3,6 +3,8 @@ package com.bjoggis.linode4j.adapter.out.api.model;
 import com.bjoggis.linode4j.adapter.out.api.model.instance.Alerts;
 import com.bjoggis.linode4j.adapter.out.api.model.instance.Backups;
 import com.bjoggis.linode4j.adapter.out.api.model.instance.Specs;
+import com.bjoggis.linode4j.domain.Instance;
+import com.bjoggis.linode4j.domain.LinodeId;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,5 +40,17 @@ public record LinodeInstance(
     if (ipv6 == null || ipv6.isEmpty()) {
       throw new IllegalArgumentException("IPv6 address is required");
     }
+  }
+
+  public Instance toDomain() {
+    final Instance instance = new Instance();
+
+    instance.setId(LinodeId.of(id));
+    instance.setLabel(label);
+    instance.setIp(ipv4.getFirst());
+    instance.setStatus(status);
+    instance.setCreated(created);
+
+    return instance;
   }
 }

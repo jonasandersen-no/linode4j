@@ -49,10 +49,10 @@ public class InstanceController {
   public CreateInstanceResponse createInstance(@RequestBody CreateInstanceRequest request) {
     logger.info("{} is creating a new instance", request.createdBy());
 
-    LinodeInstance created = service.createInstance();
+    Instance created = service.createInstance();
 
-    return new CreateInstanceResponse(request.createdBy(), created.label(),
-        created.ipv4().getFirst());
+    return new CreateInstanceResponse(request.createdBy(), created.getLabel(),
+        created.getIp());
   }
 
   @GetMapping("/list")

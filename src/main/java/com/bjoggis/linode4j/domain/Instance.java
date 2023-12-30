@@ -60,4 +60,15 @@ public final class Instance {
   public void setCreated(LocalDateTime created) {
     this.created = created;
   }
+
+  @Override
+  public String toString() {
+    return "Instance{" +
+        "id=" + id +
+        ", label='" + label + '\'' +
+        ", ip='" + ip + '\'' +
+        ", status='" + status + '\'' +
+        ", created=" + created +
+        '}';
+  }
 }
