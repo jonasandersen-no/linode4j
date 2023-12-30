@@ -1,10 +1,12 @@
 package com.bjoggis.linode4j.api;
 
 
-import com.bjoggis.linode4j.api.model.InstanceType;
-import com.bjoggis.linode4j.api.model.LinodeInstance;
-import com.bjoggis.linode4j.api.model.Page;
-import com.bjoggis.linode4j.api.model.Region;
+import com.bjoggis.linode4j.adapter.out.api.CreateInstanceRequestBody;
+import com.bjoggis.linode4j.adapter.out.api.LinodeInterface;
+import com.bjoggis.linode4j.adapter.out.api.model.InstanceType;
+import com.bjoggis.linode4j.adapter.out.api.model.LinodeInstance;
+import com.bjoggis.linode4j.adapter.out.api.model.Page;
+import com.bjoggis.linode4j.adapter.out.api.model.Region;
 import java.util.List;
 import org.instancio.Instancio;
 import org.instancio.Select;

@@ -1,4 +1,4 @@
-package com.bjoggis.linode4j.api.model.type;
+package com.bjoggis.linode4j.adapter.out.api.model.type;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.bjoggis.linode4j.api;
+package com.bjoggis.linode4j.adapter.out.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;

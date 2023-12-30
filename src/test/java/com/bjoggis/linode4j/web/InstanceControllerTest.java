@@ -11,7 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bjoggis.linode4j.TestSetup;
+import com.bjoggis.linode4j.application.port.InstanceRepository;
+import com.bjoggis.linode4j.domain.LinodeId;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -24,6 +27,9 @@ class InstanceControllerTest extends TestSetup {
 
   @Autowired
   private ObjectMapper objectMapper;
+
+  @Autowired
+  private InstanceRepository instanceRepository;
 
   @Test
   void instanceCreated() throws Exception {
@@ -42,6 +48,10 @@ class InstanceControllerTest extends TestSetup {
 
   @Test
   void listInstances() throws Exception {
+    instanceRepository.save(new com.bjoggis.linode4j.domain.Instance(
+        LinodeId.of(1L),
+        "minecraft-auto-config-123", "127.0.0.1", "running", LocalDateTime.now()));
+    
     mvc.perform(get("/instance/list"))
         .andDo(print())
         .andExpect(status().isOk())

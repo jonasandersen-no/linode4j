@@ -1,13 +1,20 @@
-package com.bjoggis.linode4j.entity;
+package com.bjoggis.linode4j.adapter.out.db;
 
+import com.bjoggis.linode4j.domain.Instance;
+import com.bjoggis.linode4j.domain.LinodeId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
+import org.springframework.data.convert.Jsr310Converters.DateToLocalDateTimeConverter;
 
 @Entity
-public class LinodeInstance {
+@Table(name = "linode_instance")
+class LinodeInstanceDbo {
 
   @Id
   @GeneratedValue
@@ -28,6 +35,25 @@ public class LinodeInstance {
 
   @Column(name = "created")
   private Date created = new Date();
+
+  static LinodeInstanceDbo fromInstance(Instance linodeInstance) {
+    LinodeInstanceDbo dbo = new LinodeInstanceDbo();
+    dbo.setLinodeId(linodeInstance.getId().id());
+    dbo.setLabel(linodeInstance.getLabel());
+    dbo.setIp(linodeInstance.getIp());
+    dbo.setStatus(linodeInstance.getStatus());
+    return dbo;
+  }
+
+  Optional<Instance> toInstanceOptional() {
+    return Optional.of(toInstance());
+  }
+
+  Instance toInstance() {
+    DateToLocalDateTimeConverter converter = DateToLocalDateTimeConverter.INSTANCE;
+    LocalDateTime date = converter.convert(created);
+    return new Instance(LinodeId.of(linodeId), label, ip, status, date);
+  }
 
   public Long getId() {
     return id;

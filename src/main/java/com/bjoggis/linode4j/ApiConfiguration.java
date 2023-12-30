@@ -1,6 +1,6 @@
 package com.bjoggis.linode4j;
 
-import com.bjoggis.linode4j.api.LinodeInterface;
+import com.bjoggis.linode4j.adapter.out.api.LinodeInterface;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;

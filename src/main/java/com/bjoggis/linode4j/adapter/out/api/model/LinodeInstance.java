@@ -1,8 +1,8 @@
-package com.bjoggis.linode4j.api.model;
+package com.bjoggis.linode4j.adapter.out.api.model;
 
-import com.bjoggis.linode4j.api.model.instance.Alerts;
-import com.bjoggis.linode4j.api.model.instance.Backups;
-import com.bjoggis.linode4j.api.model.instance.Specs;
+import com.bjoggis.linode4j.adapter.out.api.model.instance.Alerts;
+import com.bjoggis.linode4j.adapter.out.api.model.instance.Backups;
+import com.bjoggis.linode4j.adapter.out.api.model.instance.Specs;
 import java.time.LocalDateTime;
 import java.util.List;
 
