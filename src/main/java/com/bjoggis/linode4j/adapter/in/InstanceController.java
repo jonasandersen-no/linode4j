@@ -1,12 +1,15 @@
-package com.bjoggis.linode4j.web;
+package com.bjoggis.linode4j.adapter.in;
 
 import com.bjoggis.linode4j.LinodeProperties;
-import com.bjoggis.linode4j.adapter.out.api.CreateInstanceRequestBody;
 import com.bjoggis.linode4j.adapter.out.api.LinodeInterface;
 import com.bjoggis.linode4j.adapter.out.api.model.LinodeInstance;
 import com.bjoggis.linode4j.application.port.InstanceRepository;
+import com.bjoggis.linode4j.application.port.InstanceService;
 import com.bjoggis.linode4j.domain.Instance;
 import com.bjoggis.linode4j.domain.LinodeId;
+import com.bjoggis.linode4j.web.CreateInstanceRequest;
+import com.bjoggis.linode4j.web.CreateInstanceResponse;
+import com.bjoggis.linode4j.web.ListInstanceResponse;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -32,35 +35,21 @@ public class InstanceController {
   private final LinodeInterface api;
   private final LinodeProperties properties;
   private final InstanceRepository instanceRepository;
+  private final InstanceService service;
 
   public InstanceController(LinodeInterface api, LinodeProperties properties,
-      InstanceRepository instanceRepository) {
+      InstanceRepository instanceRepository, InstanceService service) {
     this.api = api;
     this.properties = properties;
     this.instanceRepository = instanceRepository;
+    this.service = service;
   }
 
   @PostMapping("/create")
   public CreateInstanceResponse createInstance(@RequestBody CreateInstanceRequest request) {
     logger.info("{} is creating a new instance", request.createdBy());
 
-    final CreateInstanceRequestBody body = new CreateInstanceRequestBody();
-    body.setRegion("se-sto");
-    body.setImage("linode/ubuntu22.04");
-    body.setLabel("minecraft-auto-config-%d".formatted(System.currentTimeMillis()));
-    body.setType("g6-standard-2");
-    body.setTags(List.of("minecraft", "auto-created"));
-    body.setRootPassword((properties.rootPassword()));
-
-    LinodeInstance created = api.create(body);
-    logger.info("Created linode instance: {}", created);
-
-    Instance instance = new Instance(LinodeId.of(created.id()), created.label(),
-        created.ipv4().getFirst(),
-        created.status(),
-        created.created());
-
-    instanceRepository.save(instance);
+    LinodeInstance created = service.createInstance();
 
     return new CreateInstanceResponse(request.createdBy(), created.label(),
         created.ipv4().getFirst());
