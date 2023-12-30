@@ -51,7 +51,7 @@ class InstanceControllerTest extends TestSetup {
     instanceRepository.save(new com.bjoggis.linode4j.domain.Instance(
         LinodeId.of(1L),
         "minecraft-auto-config-123", "127.0.0.1", "running", LocalDateTime.now()));
-    
+
     mvc.perform(get("/instance/list"))
         .andDo(print())
         .andExpect(status().isOk())
