@@ -2,8 +2,10 @@ package com.bjoggis.linode4j.adapter.out.api;
 
 import com.bjoggis.linode4j.LinodeProperties;
 import com.bjoggis.linode4j.adapter.out.api.model.LinodeInstance;
+import com.bjoggis.linode4j.adapter.out.api.model.Page;
 import com.bjoggis.linode4j.application.port.LinodeApi;
 import com.bjoggis.linode4j.domain.Instance;
+import com.bjoggis.linode4j.domain.LinodeId;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +33,23 @@ class LinodeApiAdapter implements LinodeApi {
     LinodeInstance linodeInstance = linodeInterface.create(body);
 
     return linodeInstance.toDomain();
+  }
+
+  @Override
+  public List<Instance> listInstances() {
+    Page<LinodeInstance> page = linodeInterface.list(1, 100);
+
+    List<LinodeInstance> data = page.data();
+
+    return data.stream()
+        .filter(instance -> instance.tags().contains("auto-created"))
+        .map(LinodeInstance::toDomain)
+        .toList();
+
+  }
+
+  @Override
+  public void delete(LinodeId id) {
+    linodeInterface.delete(id.id());
   }
 }

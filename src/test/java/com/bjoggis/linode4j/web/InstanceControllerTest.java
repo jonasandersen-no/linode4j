@@ -11,7 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bjoggis.linode4j.TestSetup;
-import com.bjoggis.linode4j.application.port.InstanceRepository;
+import com.bjoggis.linode4j.application.port.DummyLinodeApi;
+import com.bjoggis.linode4j.domain.Instance;
 import com.bjoggis.linode4j.domain.LinodeId;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
@@ -29,7 +30,7 @@ class InstanceControllerTest extends TestSetup {
   private ObjectMapper objectMapper;
 
   @Autowired
-  private InstanceRepository instanceRepository;
+  private DummyLinodeApi dummyLinodeApi;
 
   @Test
   void instanceCreated() throws Exception {
@@ -48,9 +49,7 @@ class InstanceControllerTest extends TestSetup {
 
   @Test
   void listInstances() throws Exception {
-    instanceRepository.save(new com.bjoggis.linode4j.domain.Instance(
-        LinodeId.of(1L),
-        "minecraft-auto-config-123", "127.0.0.1", "running", LocalDateTime.now()));
+    createAndSaveInstance();
 
     mvc.perform(get("/instance/list"))
         .andDo(print())
@@ -63,12 +62,31 @@ class InstanceControllerTest extends TestSetup {
         .andExpect(jsonPath("$[0].created").exists());
   }
 
+
   @Test
   void deleteInstance() throws Exception {
-    mvc.perform(delete("/instance/1")
-            .param("deletedBy", "admin")
+    LinodeId linodeId = createAndSaveInstance();
+
+    mvc.perform(delete("/instance/%d".formatted(linodeId.id()))
             .with(csrf()))
         .andDo(print())
         .andExpect(status().isOk());
+  }
+
+
+  Long ID_SEQ = 1L;
+
+  private LinodeId createAndSaveInstance() {
+    Long nextId = ID_SEQ;
+    ID_SEQ += 1;
+    LinodeId linodeId = LinodeId.of(nextId);
+
+    Instance instance = new Instance(
+        linodeId, "minecraft-auto-config-123",
+        "127.0.0.1", "running", LocalDateTime.now());
+
+    dummyLinodeApi.addInstance(instance);
+
+    return linodeId;
   }
 }

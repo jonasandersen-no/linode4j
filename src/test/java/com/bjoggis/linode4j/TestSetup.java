@@ -3,6 +3,7 @@ package com.bjoggis.linode4j;
 import com.bjoggis.linode4j.TestSetup.TestConfig;
 import com.bjoggis.linode4j.adapter.out.api.LinodeInterface;
 import com.bjoggis.linode4j.api.DummyLinodeInterface;
+import com.bjoggis.linode4j.application.port.DummyLinodeApi;
 import org.junit.jupiter.api.Tag;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,11 @@ public abstract class TestSetup {
     @Bean
     LinodeInterface linodeInterface() {
       return new DummyLinodeInterface();
+    }
+
+    @Bean
+    DummyLinodeApi linodeApiAdapter() {
+      return new DummyLinodeApi();
     }
   }
 }

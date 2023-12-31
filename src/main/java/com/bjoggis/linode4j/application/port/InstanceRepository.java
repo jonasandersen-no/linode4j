@@ -11,4 +11,6 @@ public interface InstanceRepository {
   void deleteByLinodeId(LinodeId linodeId);
 
   void save(Instance linodeInstance);
+
+  void flush();
 }

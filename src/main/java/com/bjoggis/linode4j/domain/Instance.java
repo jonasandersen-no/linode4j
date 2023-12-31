@@ -63,12 +63,12 @@ public final class Instance {
 
   @Override
   public String toString() {
-    return "Instance{" +
-        "id=" + id +
-        ", label='" + label + '\'' +
-        ", ip='" + ip + '\'' +
-        ", status='" + status + '\'' +
-        ", created=" + created +
-        '}';
+    return "Instance{"
+        + "id=" + id
+        + ", label='" + label + '\''
+        + ", ip='" + ip + '\''
+        + ", status='" + status + '\''
+        + ", created=" + created
+        + '}';
   }
 }
