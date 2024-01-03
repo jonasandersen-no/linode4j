@@ -29,9 +29,25 @@ jobs:
 
       - name: Push Images to Docker Registry
         run: docker push -a bjoggis/linode4j
-      - name: Create and push manifest
+  manifest:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: pull-arm64
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 5
+          retry_wait_seconds: 60
+          max_attempts: 8
+          command: docker pull bjoggis/linode4j:${{ github.ref_name }}-aarch_64
+      - name: create-manifest
         run: |
-          docker manifest create bjoggis/linode4j:${{ github.ref_name }} bjoggis/linode4j:${{ github.ref_name }}-x86_64
+          docker manifest create bjoggis/linode4j:${{ github.ref_name }} --amend bjoggis/linode4j:${{ github.ref_name }}-x86_64 --amend bjoggis/linode4j:${{ github.ref_name }}-aarch_64
           docker manifest push bjoggis/linode4j:${{ github.ref_name }}
-          docker manifest create bjoggis/linode4j:latest bjoggis/linode4j:${{ github.ref_name }}-x86_64
+          docker manifest create bjoggis/linode4j:latest --amend bjoggis/linode4j:${{ github.ref_name }}-x86_64 --amend bjoggis/linode4j:${{ github.ref_name }}-aarch_64
           docker manifest push bjoggis/linode4j:latest
