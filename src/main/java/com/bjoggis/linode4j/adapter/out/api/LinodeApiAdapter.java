@@ -2,10 +2,13 @@ package com.bjoggis.linode4j.adapter.out.api;
 
 import com.bjoggis.linode4j.LinodeProperties;
 import com.bjoggis.linode4j.adapter.out.api.model.LinodeInstance;
+import com.bjoggis.linode4j.adapter.out.api.model.LinodeVolume;
 import com.bjoggis.linode4j.adapter.out.api.model.Page;
 import com.bjoggis.linode4j.application.port.LinodeApi;
 import com.bjoggis.linode4j.domain.Instance;
 import com.bjoggis.linode4j.domain.LinodeId;
+import com.bjoggis.linode4j.domain.Volume;
+import com.bjoggis.linode4j.domain.VolumeId;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +54,25 @@ class LinodeApiAdapter implements LinodeApi {
   @Override
   public void delete(LinodeId id) {
     linodeInterface.delete(id.id());
+  }
+
+  @Override
+  public List<Volume> findVolumes() {
+    return linodeInterface.volumes().data()
+        .stream()
+        .filter(volume -> volume.tags().contains("minecraft"))
+        .map(LinodeVolume::toDomain)
+        .toList();
+  }
+
+  @Override
+  public Volume linkVolume(Instance instance, VolumeId volumeId) {
+    AttachVolumeRequestBody body = new AttachVolumeRequestBody();
+    body.setLinodeId(instance.getId().id());
+    body.setPersistAcrossBoots(false);
+
+    LinodeVolume volume = linodeInterface.attach(volumeId.id(), body);
+
+    return volume.toDomain();
   }
 }

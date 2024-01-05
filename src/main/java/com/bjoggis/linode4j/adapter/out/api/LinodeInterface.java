@@ -2,6 +2,7 @@ package com.bjoggis.linode4j.adapter.out.api;
 
 import com.bjoggis.linode4j.adapter.out.api.model.InstanceType;
 import com.bjoggis.linode4j.adapter.out.api.model.LinodeInstance;
+import com.bjoggis.linode4j.adapter.out.api.model.LinodeVolume;
 import com.bjoggis.linode4j.adapter.out.api.model.Page;
 import com.bjoggis.linode4j.adapter.out.api.model.Region;
 import jakarta.validation.constraints.Max;
@@ -35,5 +36,12 @@ public interface LinodeInterface {
 
   @DeleteExchange("/v4/linode/instances/{linodeId}")
   void delete(@PathVariable Long linodeId);
+
+
+  @GetExchange("/v4/volumes")
+  Page<LinodeVolume> volumes();
+
+  @PostExchange("/v4/volumes/{volumeId}/attach")
+  LinodeVolume attach(@PathVariable Long volumeId, @RequestBody AttachVolumeRequestBody body);
 
 }

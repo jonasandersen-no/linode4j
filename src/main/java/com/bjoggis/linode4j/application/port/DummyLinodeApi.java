@@ -2,6 +2,8 @@ package com.bjoggis.linode4j.application.port;
 
 import com.bjoggis.linode4j.domain.Instance;
 import com.bjoggis.linode4j.domain.LinodeId;
+import com.bjoggis.linode4j.domain.Volume;
+import com.bjoggis.linode4j.domain.VolumeId;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,5 +34,15 @@ public class DummyLinodeApi implements LinodeApi {
   @Override
   public void delete(LinodeId id) {
     instances.removeIf(instance -> instance.getId() == id);
+  }
+
+  @Override
+  public List<Volume> findVolumes() {
+    return null;
+  }
+
+  @Override
+  public Volume linkVolume(Instance instance, VolumeId volumeId) {
+    return null;
   }
 }

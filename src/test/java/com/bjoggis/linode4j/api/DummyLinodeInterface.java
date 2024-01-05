@@ -1,10 +1,12 @@
 package com.bjoggis.linode4j.api;
 
 
+import com.bjoggis.linode4j.adapter.out.api.AttachVolumeRequestBody;
 import com.bjoggis.linode4j.adapter.out.api.CreateInstanceRequestBody;
 import com.bjoggis.linode4j.adapter.out.api.LinodeInterface;
 import com.bjoggis.linode4j.adapter.out.api.model.InstanceType;
 import com.bjoggis.linode4j.adapter.out.api.model.LinodeInstance;
+import com.bjoggis.linode4j.adapter.out.api.model.LinodeVolume;
 import com.bjoggis.linode4j.adapter.out.api.model.Page;
 import com.bjoggis.linode4j.adapter.out.api.model.Region;
 import java.util.List;
@@ -49,5 +51,15 @@ public class DummyLinodeInterface implements LinodeInterface {
   @Override
   public void delete(Long linodeId) {
 
+  }
+
+  @Override
+  public Page<LinodeVolume> volumes() {
+    return null;
+  }
+
+  @Override
+  public LinodeVolume attach(Long volumeId, AttachVolumeRequestBody body) {
+    return null;
   }
 }
