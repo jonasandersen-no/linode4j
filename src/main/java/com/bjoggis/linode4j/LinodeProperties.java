@@ -7,6 +7,6 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "linode")
 @Validated
 public record LinodeProperties(@NotNull String baseUrl, @NotNull String token,
-                               @NotNull String rootPassword) {
+                               @NotNull String rootPassword, @NotNull Long volumeId) {
 
 }

@@ -11,6 +11,7 @@ import com.bjoggis.linode4j.domain.VolumeNotFoundException;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class InstanceServiceImpl implements InstanceService {
   private final Logger logger = LoggerFactory.getLogger(InstanceServiceImpl.class);
   private final LinodeApi api;
 
+  @Value("${linode.volume-id}")
+  private Long volumeId;
+
   public InstanceServiceImpl(LinodeApi api) {
     this.api = api;
   }
@@ -30,6 +34,12 @@ public class InstanceServiceImpl implements InstanceService {
   public Instance createInstance() {
     Instance instance = api.createInstance();
     logger.info("Created linode instance: {}", instance);
+
+    try {
+      linkVolume(instance.getId(), VolumeId.of(volumeId));
+    } catch (InstanceNotFoundException e) {
+      throw new RuntimeException(e);
+    }
     return instance;
   }
 
