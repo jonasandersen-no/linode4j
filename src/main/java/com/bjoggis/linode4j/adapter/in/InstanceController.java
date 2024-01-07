@@ -2,6 +2,7 @@ package com.bjoggis.linode4j.adapter.in;
 
 import com.bjoggis.linode4j.application.port.InstanceService;
 import com.bjoggis.linode4j.application.usecase.CreateInstanceUseCase;
+import com.bjoggis.linode4j.application.usecase.DeleteInstanceUseCase;
 import com.bjoggis.linode4j.application.usecase.ListInstancesUseCase;
 import com.bjoggis.linode4j.domain.Instance;
 import com.bjoggis.linode4j.domain.LinodeId;
@@ -28,12 +29,14 @@ public class InstanceController {
 
   private final CreateInstanceUseCase createInstanceUseCase;
   private final ListInstancesUseCase listInstancesUseCase;
+  private final DeleteInstanceUseCase deleteInstanceUseCase;
 
   public InstanceController(InstanceService service, CreateInstanceUseCase createInstanceUseCase,
-      ListInstancesUseCase listInstancesUseCase) {
+      ListInstancesUseCase listInstancesUseCase, DeleteInstanceUseCase deleteInstanceUseCase) {
     this.service = service;
     this.createInstanceUseCase = createInstanceUseCase;
     this.listInstancesUseCase = listInstancesUseCase;
+    this.deleteInstanceUseCase = deleteInstanceUseCase;
   }
 
   @PostMapping("/create")
@@ -56,6 +59,6 @@ public class InstanceController {
 
   @DeleteMapping("{id}")
   public void deleteInstance(@PathVariable Long id) {
-    service.deleteInstance(new LinodeId(id));
+    deleteInstanceUseCase.deleteInstance(LinodeId.of(id));
   }
 }

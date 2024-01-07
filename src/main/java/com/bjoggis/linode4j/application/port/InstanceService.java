@@ -1,16 +1,12 @@
 package com.bjoggis.linode4j.application.port;
 
-import com.bjoggis.linode4j.domain.Instance;
 import com.bjoggis.linode4j.domain.InstanceNotFoundException;
 import com.bjoggis.linode4j.domain.LinodeId;
 import com.bjoggis.linode4j.domain.Volume;
 import com.bjoggis.linode4j.domain.VolumeId;
 import com.bjoggis.linode4j.domain.VolumeNotFoundException;
-import java.util.List;
 
 public interface InstanceService {
-
-  void deleteInstance(LinodeId id);
 
   /**
    * Links a volume to an instance. Throws an Exception if the instance or volume does not exist.
