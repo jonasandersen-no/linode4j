@@ -7,6 +7,20 @@ public class Volume {
   private String status;
   private LinodeId linodeId;
 
+  public Volume() {
+  }
+
+  public Volume(VolumeId id) {
+    this.id = id;
+  }
+
+  public Volume(VolumeId id, String label, String status, LinodeId linodeId) {
+    this.id = id;
+    this.label = label;
+    this.status = status;
+    this.linodeId = linodeId;
+  }
+
   public VolumeId getId() {
     return id;
   }

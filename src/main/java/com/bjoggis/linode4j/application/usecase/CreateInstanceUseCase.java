@@ -1,6 +1,5 @@
 package com.bjoggis.linode4j.application.usecase;
 
-import com.bjoggis.linode4j.application.InstanceServiceImpl;
 import com.bjoggis.linode4j.application.port.LinodeApi;
 import com.bjoggis.linode4j.domain.Instance;
 import org.slf4j.Logger;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CreateInstanceUseCase {
 
-  private static final Logger logger = LoggerFactory.getLogger(InstanceServiceImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(CreateInstanceUseCase.class);
   private final LinodeApi api;
 
   public CreateInstanceUseCase(LinodeApi api) {

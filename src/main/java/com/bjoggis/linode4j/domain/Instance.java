@@ -13,6 +13,10 @@ public final class Instance {
   public Instance() {
   }
 
+  public Instance(LinodeId id) {
+    this.id = id;
+  }
+
   public Instance(LinodeId id, String label, String ip, String status, LocalDateTime date) {
     this.id = id;
     this.label = label;
