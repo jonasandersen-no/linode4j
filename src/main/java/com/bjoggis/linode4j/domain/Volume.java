@@ -52,4 +52,14 @@ public class Volume {
   public void setLinodeId(LinodeId linodeId) {
     this.linodeId = linodeId;
   }
+
+  @Override
+  public String toString() {
+    return "Volume{" +
+        "id=" + id +
+        ", label='" + label + '\'' +
+        ", status='" + status + '\'' +
+        ", linodeId=" + linodeId +
+        '}';
+  }
 }

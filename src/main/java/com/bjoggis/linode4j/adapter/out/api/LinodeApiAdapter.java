@@ -60,7 +60,7 @@ class LinodeApiAdapter implements LinodeApi {
   public List<Volume> findVolumes() {
     return linodeInterface.volumes().data()
         .stream()
-        .filter(volume -> volume.tags().contains("minecraft"))
+        .filter(volume -> volume.tags().contains("auto-created"))
         .map(LinodeVolume::toDomain)
         .toList();
   }
