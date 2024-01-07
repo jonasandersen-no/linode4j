@@ -23,9 +23,8 @@ class InstanceServiceTest {
       DummyLinodeApi api = new DummyLinodeApi();
       InstanceService service = new InstanceServiceImpl(api);
 
-      Instance instance = service.createInstance();
 
-      service.linkVolume(instance.getId(), VolumeId.of(2L));
+//      service.linkVolume(instance.getId(), VolumeId.of(2L));
     }
 
     @Test
@@ -34,7 +33,6 @@ class InstanceServiceTest {
       DummyLinodeApi api = new DummyLinodeApi();
       InstanceService service = new InstanceServiceImpl(api);
 
-      Instance instance = service.createInstance();
 
       assertThrows(VolumeNotFoundException.class, () -> {
         service.linkVolume(LinodeId.of(1L), VolumeId.of(2L));

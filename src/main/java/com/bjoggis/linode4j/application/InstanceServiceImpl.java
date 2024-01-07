@@ -31,19 +31,6 @@ public class InstanceServiceImpl implements InstanceService {
   }
 
   @Override
-  public Instance createInstance() {
-    Instance instance = api.createInstance();
-    logger.info("Created linode instance: {}", instance);
-
-    try {
-      linkVolume(instance.getId(), VolumeId.of(volumeId));
-    } catch (InstanceNotFoundException e) {
-      throw new RuntimeException(e);
-    }
-    return instance;
-  }
-
-  @Override
   public Instance findInstance(LinodeId id) throws InstanceNotFoundException {
     return api.listInstances().stream()
         .filter(instance -> instance.getId().equals(id))

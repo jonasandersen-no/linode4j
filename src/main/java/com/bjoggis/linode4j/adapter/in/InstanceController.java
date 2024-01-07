@@ -1,6 +1,7 @@
 package com.bjoggis.linode4j.adapter.in;
 
 import com.bjoggis.linode4j.application.port.InstanceService;
+import com.bjoggis.linode4j.application.usecase.CreateInstanceUseCase;
 import com.bjoggis.linode4j.domain.Instance;
 import com.bjoggis.linode4j.domain.LinodeId;
 import com.bjoggis.linode4j.web.CreateInstanceRequest;
@@ -24,15 +25,18 @@ public class InstanceController {
   private final Logger logger = LoggerFactory.getLogger(InstanceController.class);
   private final InstanceService service;
 
-  public InstanceController(InstanceService service) {
+  private final CreateInstanceUseCase createInstanceUseCase;
+
+  public InstanceController(InstanceService service, CreateInstanceUseCase createInstanceUseCase) {
     this.service = service;
+    this.createInstanceUseCase = createInstanceUseCase;
   }
 
   @PostMapping("/create")
   public CreateInstanceResponse createInstance(@RequestBody CreateInstanceRequest request) {
     logger.info("{} is creating a new instance", request.createdBy());
 
-    Instance created = service.createInstance();
+    Instance created = createInstanceUseCase.createInstance();
 
     return new CreateInstanceResponse(request.createdBy(), created.getLabel(),
         created.getIp());
