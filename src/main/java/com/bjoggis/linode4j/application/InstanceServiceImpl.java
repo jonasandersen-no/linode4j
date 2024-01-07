@@ -8,7 +8,6 @@ import com.bjoggis.linode4j.domain.LinodeId;
 import com.bjoggis.linode4j.domain.Volume;
 import com.bjoggis.linode4j.domain.VolumeId;
 import com.bjoggis.linode4j.domain.VolumeNotFoundException;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,11 +35,6 @@ public class InstanceServiceImpl implements InstanceService {
         .filter(instance -> instance.getId().equals(id))
         .findFirst()
         .orElseThrow(() -> new InstanceNotFoundException(id));
-  }
-
-  @Override
-  public List<Instance> listInstances() {
-    return api.listInstances();
   }
 
   @Override

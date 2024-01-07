@@ -12,8 +12,6 @@ public interface InstanceService {
 
   Instance findInstance(LinodeId id) throws InstanceNotFoundException;
 
-  List<Instance> listInstances();
-
   void deleteInstance(LinodeId id);
 
   /**

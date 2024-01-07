@@ -2,6 +2,7 @@ package com.bjoggis.linode4j.adapter.in;
 
 import com.bjoggis.linode4j.application.port.InstanceService;
 import com.bjoggis.linode4j.application.usecase.CreateInstanceUseCase;
+import com.bjoggis.linode4j.application.usecase.ListInstancesUseCase;
 import com.bjoggis.linode4j.domain.Instance;
 import com.bjoggis.linode4j.domain.LinodeId;
 import com.bjoggis.linode4j.web.CreateInstanceRequest;
@@ -26,10 +27,13 @@ public class InstanceController {
   private final InstanceService service;
 
   private final CreateInstanceUseCase createInstanceUseCase;
+  private final ListInstancesUseCase listInstancesUseCase;
 
-  public InstanceController(InstanceService service, CreateInstanceUseCase createInstanceUseCase) {
+  public InstanceController(InstanceService service, CreateInstanceUseCase createInstanceUseCase,
+      ListInstancesUseCase listInstancesUseCase) {
     this.service = service;
     this.createInstanceUseCase = createInstanceUseCase;
+    this.listInstancesUseCase = listInstancesUseCase;
   }
 
   @PostMapping("/create")
@@ -44,7 +48,7 @@ public class InstanceController {
 
   @GetMapping("/list")
   public List<ListInstanceResponse> listInstances() {
-    List<Instance> instances = service.listInstances();
+    List<Instance> instances = listInstancesUseCase.listInstances();
     return instances.stream()
         .map(ListInstanceResponse::fromDomain)
         .toList();
