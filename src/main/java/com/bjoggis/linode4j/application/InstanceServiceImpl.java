@@ -2,6 +2,7 @@ package com.bjoggis.linode4j.application;
 
 import com.bjoggis.linode4j.application.port.InstanceService;
 import com.bjoggis.linode4j.application.port.LinodeApi;
+import com.bjoggis.linode4j.application.usecase.FindInstanceUseCase;
 import com.bjoggis.linode4j.domain.Instance;
 import com.bjoggis.linode4j.domain.InstanceNotFoundException;
 import com.bjoggis.linode4j.domain.LinodeId;
@@ -21,20 +22,14 @@ public class InstanceServiceImpl implements InstanceService {
 
   private final Logger logger = LoggerFactory.getLogger(InstanceServiceImpl.class);
   private final LinodeApi api;
+  private final FindInstanceUseCase findInstanceUseCase;
 
   @Value("${linode.volume-id}")
   private Long volumeId;
 
-  public InstanceServiceImpl(LinodeApi api) {
+  public InstanceServiceImpl(LinodeApi api, FindInstanceUseCase findInstanceUseCase) {
     this.api = api;
-  }
-
-  @Override
-  public Instance findInstance(LinodeId id) throws InstanceNotFoundException {
-    return api.listInstances().stream()
-        .filter(instance -> instance.getId().equals(id))
-        .findFirst()
-        .orElseThrow(() -> new InstanceNotFoundException(id));
+    this.findInstanceUseCase = findInstanceUseCase;
   }
 
   @Override
@@ -60,7 +55,7 @@ public class InstanceServiceImpl implements InstanceService {
   public void linkVolume(LinodeId id, VolumeId volumeId) throws InstanceNotFoundException {
     logger.info("Linking volume {} to instance {}", volumeId, id);
 
-    Instance instance = findInstance(id);
+    Instance instance = findInstanceUseCase.findInstance(id);
 
     Volume volume = findVolume(volumeId);
 

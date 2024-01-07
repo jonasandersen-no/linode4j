@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface InstanceService {
 
-  Instance findInstance(LinodeId id) throws InstanceNotFoundException;
-
   void deleteInstance(LinodeId id);
 
   /**

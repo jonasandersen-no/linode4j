@@ -3,7 +3,7 @@ package com.bjoggis.linode4j.application.port;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.bjoggis.linode4j.application.InstanceServiceImpl;
-import com.bjoggis.linode4j.domain.Instance;
+import com.bjoggis.linode4j.application.usecase.FindInstanceUseCase;
 import com.bjoggis.linode4j.domain.InstanceNotFoundException;
 import com.bjoggis.linode4j.domain.LinodeId;
 import com.bjoggis.linode4j.domain.VolumeId;
@@ -21,8 +21,7 @@ class InstanceServiceTest {
     @Disabled
     void linkVolumeAttachesVolumeToInstance() throws InstanceNotFoundException {
       DummyLinodeApi api = new DummyLinodeApi();
-      InstanceService service = new InstanceServiceImpl(api);
-
+      InstanceService service = new InstanceServiceImpl(api, new FindInstanceUseCase(api));
 
 //      service.linkVolume(instance.getId(), VolumeId.of(2L));
     }
@@ -31,8 +30,7 @@ class InstanceServiceTest {
     @Disabled
     void linkNonExistingVolumeThrowsException() {
       DummyLinodeApi api = new DummyLinodeApi();
-      InstanceService service = new InstanceServiceImpl(api);
-
+      InstanceService service = new InstanceServiceImpl(api, new FindInstanceUseCase(api));
 
       assertThrows(VolumeNotFoundException.class, () -> {
         service.linkVolume(LinodeId.of(1L), VolumeId.of(2L));
@@ -42,7 +40,7 @@ class InstanceServiceTest {
     @Test
     void linkNonExistingInstanceThrowsException() {
       DummyLinodeApi api = new DummyLinodeApi();
-      InstanceService service = new InstanceServiceImpl(api);
+      InstanceService service = new InstanceServiceImpl(api, new FindInstanceUseCase(api));
 
       assertThrows(InstanceNotFoundException.class, () -> {
         service.linkVolume(LinodeId.of(1L), VolumeId.of(2L));
