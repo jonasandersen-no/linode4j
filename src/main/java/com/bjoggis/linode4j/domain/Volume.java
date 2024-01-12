@@ -7,6 +7,8 @@ public class Volume {
   private String status;
   private LinodeId linodeId;
 
+  private Tag tag;
+
   public Volume() {
   }
 
@@ -51,6 +53,14 @@ public class Volume {
 
   public void setLinodeId(LinodeId linodeId) {
     this.linodeId = linodeId;
+  }
+
+  public Tag getTag() {
+    return tag;
+  }
+
+  public void setTag(Tag tag) {
+    this.tag = tag;
   }
 
   @Override
