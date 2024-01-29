@@ -54,7 +54,7 @@
     <dependency>
       <groupId>cc.jilt</groupId>
       <artifactId>jilt</artifactId>
-      <version>1.3</version>
+      <version>1.4</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
