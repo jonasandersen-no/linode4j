@@ -21,7 +21,7 @@ public class ListVolumeUseCase {
   }
 
   /**
-   * List volumes with a specific tag
+   * List volumes with a specific tag.
    *
    * @param tag the tag to filter on
    * @return a list of volumes with the given tag

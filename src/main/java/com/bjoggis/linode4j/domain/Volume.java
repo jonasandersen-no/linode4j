@@ -65,11 +65,14 @@ public class Volume {
 
   @Override
   public String toString() {
-    return "Volume{" +
-        "id=" + id +
-        ", label='" + label + '\'' +
-        ", status='" + status + '\'' +
-        ", linodeId=" + linodeId +
-        '}';
+    return "Volume{"
+        + "id=" + id
+        + ", label='"
+        + label + '\''
+        + ", status='"
+        + status + '\''
+        + ", linodeId="
+        + linodeId
+        + '}';
   }
 }
