@@ -44,7 +44,7 @@ public class InstanceController {
 
     Instance created = createInstanceUseCase.createInstance();
 
-    return new CreateInstanceResponse(request.createdBy(), created.getLabel(),
+    return new CreateInstanceResponse(created.getId().id(), request.createdBy(), created.getLabel(),
         created.getIp());
   }
 
