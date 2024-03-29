@@ -29,7 +29,7 @@ class LinodeApiAdapter implements LinodeApi {
     body.setRegion("se-sto");
     body.setImage("linode/ubuntu22.04");
     body.setLabel("minecraft-auto-config-%d".formatted(System.currentTimeMillis()));
-    body.setType("g6-standard-2");
+    body.setType("g6-dedicated-4");
     body.setTags(List.of("minecraft", "auto-created"));
     body.setRootPassword((properties.rootPassword()));
 
