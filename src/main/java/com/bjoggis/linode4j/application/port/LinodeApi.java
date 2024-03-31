@@ -17,4 +17,6 @@ public interface LinodeApi {
   List<Volume> findVolumes();
 
   Volume linkVolume(Instance instance, VolumeId volumeId);
+
+  void detachVolume(VolumeId volumeId);
 }

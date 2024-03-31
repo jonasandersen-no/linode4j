@@ -52,5 +52,10 @@ class FindVolumeUseCaseTest {
     public Volume linkVolume(Instance instance, VolumeId volumeId) {
       return null;
     }
+
+    @Override
+    public void detachVolume(VolumeId volumeId) {
+
+    }
   }
 }

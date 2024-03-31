@@ -62,4 +62,9 @@ public class DummyLinodeInterface implements LinodeInterface {
   public LinodeVolume attach(Long volumeId, AttachVolumeRequestBody body) {
     return null;
   }
+
+  @Override
+  public LinodeVolume detach(Long volumeId) {
+    return null;
+  }
 }

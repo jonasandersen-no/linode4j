@@ -75,4 +75,9 @@ class LinodeApiAdapter implements LinodeApi {
 
     return volume.toDomain();
   }
+
+  @Override
+  public void detachVolume(VolumeId volumeId) {
+    linodeInterface.detach(volumeId.id());
+  }
 }

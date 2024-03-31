@@ -44,4 +44,6 @@ public interface LinodeInterface {
   @PostExchange("/v4/volumes/{volumeId}/attach")
   LinodeVolume attach(@PathVariable Long volumeId, @RequestBody AttachVolumeRequestBody body);
 
+  @PostExchange("/v4/volumes/{volumeId}/detach")
+  LinodeVolume detach(@PathVariable Long volumeId);
 }

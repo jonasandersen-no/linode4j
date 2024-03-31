@@ -44,4 +44,16 @@ public class AttachVolumeUseCase {
         .findFirst()
         .orElseThrow(() -> new InstanceNotFoundException(id));
   }
+
+  public void unlinkVolume(VolumeId volumeId) {
+    api.findVolumes().stream()
+        .filter(volume -> volume.getId().equals(volumeId))
+        .findFirst()
+        .ifPresentOrElse(volume -> {
+          logger.info("Unlinking volume {}", volumeId);
+          api.detachVolume(volumeId);
+        }, () -> {
+          logger.warn("Volume {} not found", volumeId);
+        });
+  }
 }

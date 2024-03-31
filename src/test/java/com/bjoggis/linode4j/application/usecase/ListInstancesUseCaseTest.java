@@ -41,6 +41,11 @@ class ListInstancesUseCaseTest {
       public Volume linkVolume(Instance instance, VolumeId volumeId) {
         return null;
       }
+
+      @Override
+      public void detachVolume(VolumeId volumeId) {
+
+      }
     });
 
     List<Instance> instances = useCase.listInstances();

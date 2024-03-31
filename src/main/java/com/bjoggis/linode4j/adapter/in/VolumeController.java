@@ -34,4 +34,9 @@ public class VolumeController {
       throws InstanceNotFoundException {
     attachVolumeUseCase.linkVolume(LinodeId.of(linodeId), VolumeId.of(volumeId));
   }
+
+  @PatchMapping("/detach")
+  void detachVolume(@RequestParam Long volumeId) {
+    attachVolumeUseCase.unlinkVolume(VolumeId.of(volumeId));
+  }
 }

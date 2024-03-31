@@ -28,7 +28,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build with Maven
-        run: mvn clean package
+        run: mvn spring-boot:build-image -Pnative
 
       - name: Push Images to Docker Registry
         run: docker push -a bjoggis/linode4j

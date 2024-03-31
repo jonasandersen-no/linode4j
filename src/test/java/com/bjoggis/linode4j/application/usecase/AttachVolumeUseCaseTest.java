@@ -57,5 +57,10 @@ class AttachVolumeUseCaseTest {
       }
       throw new IllegalArgumentException();
     }
+
+    @Override
+    public void detachVolume(VolumeId volumeId) {
+
+    }
   }
 }
