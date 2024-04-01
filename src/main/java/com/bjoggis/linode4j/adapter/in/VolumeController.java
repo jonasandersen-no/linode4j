@@ -4,7 +4,9 @@ import com.bjoggis.linode4j.application.usecase.AttachVolumeUseCase;
 import com.bjoggis.linode4j.application.usecase.ListVolumeUseCase;
 import com.bjoggis.linode4j.domain.InstanceNotFoundException;
 import com.bjoggis.linode4j.domain.LinodeId;
+import com.bjoggis.linode4j.domain.Volume;
 import com.bjoggis.linode4j.domain.VolumeId;
+import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +26,23 @@ public class VolumeController {
     this.attachVolumeUseCase = attachVolumeUseCase;
   }
 
+  record VolumeResponse(Long id, String label, String status, Long linodeId) {
+
+  }
+
   @GetMapping
-  String listVolumes() {
-    return listVolumeUseCase.listVolume().toString();
+  List<VolumeResponse> listVolumes() {
+    List<Volume> volumes = listVolumeUseCase.listVolume();
+    return volumes.stream()
+        .map(
+            volume -> {
+              var volumeId = volume.getId() != null ? volume.getId().id() : null;
+              var linodeId = volume.getLinodeId() != null ? volume.getLinodeId().id() : null;
+
+              return new VolumeResponse(volumeId, volume.getLabel(), volume.getStatus(),
+                  linodeId);
+            })
+        .toList();
   }
 
   @PatchMapping
